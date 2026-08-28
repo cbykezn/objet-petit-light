@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WorkIndex from '../components/WorkIndex.astro';
+import ProjectGrid from '../components/ProjectGrid.astro';
+import { projects } from '../data/projects';
+const landing = projects.filter((project) => project.landing).slice(0, 4);
+---
+<BaseLayout>
+  <section class="landing" aria-label="Objet Petit L">
+    <div class="slides">{landing.map((project, index) => <img class:list={[{visible:index === 0}]} src={project.cover} alt="" />)}</div>
+    <div class="landing-copy"><p class="eyebrow">Lighting Design Studio — Taipei</p><h1>Objet<br />Petit L</h1><a href="#works">VIEW WORKS <span>↓</span></a></div>
+  </section>
+  <section class="manifesto section"><p class="eyebrow">Studio Manifesto</p><h2>以光為語言，為舞台、身體與空間建立感知的節奏。</h2><p>Objet Petit L 是由黃俊諺創立的燈光設計工作室，從劇場、舞蹈到建築與展覽現場，探索光在時間與空間中的敘事可能。</p></section>
+  <div id="works"><WorkIndex /><section class="section"><p class="eyebrow">Selected Works</p><ProjectGrid projects={projects} /></section></div>
+  <section class="services section"><p class="eyebrow">Services</p><div><a href="/services/theater-dance">劇場與舞蹈 <span>Theatre / Dance</span></a><a href="/services/space-lighting">空間燈光 <span>Spatial Lighting</span></a><a href="/services/exhibition">展覽 <span>Exhibition</span></a><a href="/services/events">活動 <span>Events</span></a></div></section>
+  <section class="contact section"><p class="eyebrow">Contact</p><h2>讓我們一起，為下一個場景點燈。</h2><a class="contact-link" href="/contact">開始對話 →</a></section>
+</BaseLayout>
+<script>
+  const slides = [...document.querySelectorAll<HTMLImageElement>('.slides img')];
+  if (slides.length > 1) setInterval(() => { const current = slides.findIndex((slide) => slide.classList.contains('visible')); slides[current].classList.remove('visible'); slides[(current + 1) % slides.length].classList.add('visible'); }, 4200);
+</script>
+<style>
+  .landing{position:relative;min-height:calc(100svh - 58px);background:#131310;color:#f3f1ea;overflow:hidden}.slides,.slides img{position:absolute;inset:0;width:100%;height:100%}.slides img{object-fit:cover;opacity:0;transition:opacity 1.2s ease}.slides img.visible{opacity:.72}.landing:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.48),transparent 65%)}.landing-copy{position:relative;z-index:1;display:flex;min-height:calc(100svh - 58px);padding:clamp(1.5rem,5vw,5rem) var(--edge);flex-direction:column;align-items:start;justify-content:space-between}.landing h1{margin:0;font-family:'IBM Plex Mono',monospace;font-size:clamp(4.5rem,14vw,13rem);line-height:.75;letter-spacing:-.1em}.landing-copy a{font-family:'IBM Plex Mono',monospace;font-size:12px}.landing-copy a span{margin-left:.7rem}.manifesto{display:grid;grid-template-columns:1fr 2fr;gap:2rem}.manifesto h2{margin:0;font-size:clamp(2rem,5vw,5rem);font-weight:500;line-height:1.25}.manifesto>p:last-child{grid-column:2;max-width:34rem}.services{background:var(--ink);color:var(--paper)}.services>div{border-top:1px solid rgba(243,241,234,.35)}.services a{display:flex;justify-content:space-between;padding:1rem 0;border-bottom:1px solid rgba(243,241,234,.35);font-size:clamp(1.5rem,4vw,3.75rem)}.services span{font-family:'IBM Plex Mono',monospace;font-size:11px;padding-top:.8rem}.contact h2{max-width:15ch;font-size:clamp(2.5rem,7vw,7rem);font-weight:500;line-height:1.15}.contact-link{font-family:'IBM Plex Mono',monospace;font-size:14px;text-decoration:underline;text-underline-offset:.4rem}@media(max-width:700px){.manifesto{display:block}.manifesto h2{margin:2rem 0}.services a{font-size:1.4rem}.services span{font-size:9px}.landing h1{font-size:24vw}}
+</style>

@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+export const services = {
+  'theater-dance': { title:'劇場／舞蹈', english:'Theatre / Dance', body:'從排練到演出現場，與導演、編舞家及技術團隊共同建立光的時間性與情緒結構。' },
+  'space-lighting': { title:'空間燈光', english:'Spatial Lighting', body:'以光線梳理空間的尺度、材質與停留方式，讓建築環境在日常與特殊時刻都有清晰的感受。' },
+  exhibition: { title:'展覽', english:'Exhibition', body:'為展件、觀者與敘事之間設定觀看的節奏，讓光成為展覽內容的一部分。' },
+  events: { title:'活動', english:'Events', body:'為品牌活動與現場演出打造可被記住的視覺氣氛，並兼顧執行的精準與彈性。' }
+} as const;
+export function getStaticPaths(){ return Object.entries(services).map(([service, content]) => ({ params:{service}, props:{content} })); }
+const { content } = Astro.props;
+---
+<BaseLayout title={`${content.title} — Objet Petit L`}><section class="intro section"><p class="eyebrow">Services / {content.english}</p><h1>{content.title}</h1><p>{content.body}</p><a href="/contact">與我們討論你的計畫 →</a></section></BaseLayout>
+<style>.intro{min-height:70svh;display:flex;flex-direction:column;align-items:start;justify-content:center}.intro h1{margin:.6rem 0;font-size:clamp(3rem,10vw,10rem);font-weight:500;line-height:1.05}.intro p:not(.eyebrow){max-width:34rem;font-size:clamp(1.1rem,2vw,1.5rem)}.intro a{margin-top:2rem;font-family:'IBM Plex Mono',monospace;text-decoration:underline;text-underline-offset:.4rem}</style>

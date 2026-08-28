@@ -1,0 +1,11 @@
+---
+import type { Project } from '../data/projects';
+const { projects } = Astro.props as { projects: Project[] };
+---
+<div class="grid">
+  {projects.map((project) => <a class="project" href={`/projects/${project.slug}`}>
+    <img src={project.cover} alt={`${project.title} 劇照`} loading="lazy" />
+    <div class="caption"><span>{project.title}</span><span>{project.year}</span></div>
+  </a>)}
+</div>
+<style>.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3.5rem 1rem}.project img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#292821;transition:opacity .2s}.project:hover img{opacity:.78}.caption{display:flex;justify-content:space-between;gap:1rem;padding-top:.55rem;font-family:'IBM Plex Mono',monospace;font-size:11px}@media(max-width:700px){.grid{grid-template-columns:1fr;gap:2.5rem}}</style>

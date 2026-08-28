@@ -1,0 +1,33 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+interface Props { title?: string; description?: string; }
+const { title = 'Objet Petit L — Lighting Design', description = 'Objet Petit L 燈光設計工作室' } = Astro.props;
+---
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#11110f" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <Header />
+    <main><slot /></main>
+    <Footer />
+  </body>
+</html>
+<style is:global>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700&display=swap');
+  :root { --ink:#11110f; --paper:#f3f1ea; --muted:#78766e; --line:rgba(17,17,15,.24); --edge:clamp(1rem,3vw,3.5rem); }
+  * { box-sizing:border-box; }
+  html { background:var(--paper); scroll-behavior:smooth; }
+  body { margin:0; color:var(--ink); background:var(--paper); font-family:'Noto Sans TC',sans-serif; font-size:14px; line-height:1.55; }
+  a { color:inherit; text-decoration:none; }
+  button { font:inherit; }
+  .eyebrow { font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.05em; text-transform:uppercase; }
+  .section { padding:clamp(4rem,10vw,9rem) var(--edge); }
+  .section-title { margin:0 0 2.5rem; font-size:clamp(1.8rem,4vw,4.5rem); font-weight:500; line-height:1.1; }
+</style>

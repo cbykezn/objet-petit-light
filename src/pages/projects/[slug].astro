@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'; import { projects } from '../../data/projects';
+export function getStaticPaths() { return projects.map((project) => ({ params: { slug: project.slug }, props: { project } })); }
+const { project } = Astro.props;
+---
+<BaseLayout title={`${project.title} — Objet Petit L`} description={project.credits ?? project.title}>
+  <article><section class="hero"><img src={project.cover} alt={`${project.title} 主劇照`} /><div><p class="eyebrow">{project.category} / {project.year}</p><h1>{project.title}</h1></div></section>
+  <section class="info section"><dl><div><dt>YEAR</dt><dd>{project.year}</dd></div>{project.company && <div><dt>COMPANY</dt><dd>{project.company}</dd></div>}{project.venue && <div><dt>VENUE</dt><dd>{project.venue}</dd></div>}</dl><div class="credits"><p class="eyebrow">Credits</p><p>{project.credits}</p></div></section>
+  <section class="gallery">{project.gallery.map((image, index) => <button data-image={image} aria-label={`檢視第 ${index + 1} 張劇照`}><img src={image} alt={`${project.title} 劇照 ${index + 1}`} loading="lazy" /></button>)}</section></article>
+  <dialog><button class="close" aria-label="關閉">×</button><img alt="全螢幕劇照" /></dialog>
+</BaseLayout>
+<script>
+  const dialog=document.querySelector('dialog'); const large=dialog?.querySelector('img'); document.querySelectorAll<HTMLButtonElement>('.gallery button').forEach((button)=>button.addEventListener('click',()=>{if(large)large.src=button.dataset.image??'';dialog?.showModal()})); dialog?.querySelector('.close')?.addEventListener('click',()=>dialog.close());
+</script>
+<style>.hero{position:relative;background:#181713}.hero>img{display:block;width:100%;height:min(78svh,900px);object-fit:cover}.hero>div{position:absolute;inset:auto var(--edge) 1.5rem;color:white}.hero h1{margin:.3rem 0 0;font-size:clamp(2.5rem,7vw,7rem);font-weight:500;line-height:1.05}.info{display:grid;grid-template-columns:1fr 1fr;gap:3rem}.info dl{margin:0}.info dl div{display:grid;grid-template-columns:8rem 1fr;padding:.5rem 0;border-top:1px solid var(--line)}dt{font-family:'IBM Plex Mono',monospace;font-size:11px}dd{margin:0}.credits p:last-child{white-space:pre-line}.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:.35rem}.gallery button{padding:0;border:0;background:none;cursor:zoom-in}.gallery img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}dialog{max-width:none;width:100vw;height:100svh;padding:0;border:0;background:rgba(0,0,0,.96)}dialog img{width:100%;height:100%;object-fit:contain}.close{position:fixed;top:1rem;right:var(--edge);z-index:1;border:0;background:none;color:white;font-size:2rem;cursor:pointer}@media(max-width:700px){.info{grid-template-columns:1fr;gap:2rem}.gallery{grid-template-columns:1fr}.hero>img{height:64svh}}</style>

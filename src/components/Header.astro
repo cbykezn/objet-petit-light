@@ -1,0 +1,25 @@
+---
+const links = [
+  ['作品','/works'], ['服務','/services'], ['簡介 / CV','/profile-cv'], ['聯絡','/contact']
+];
+---
+<header class="header">
+  <a class="brand" href="/" aria-label="Objet Petit L 首頁">Objet<br />Petit L</a>
+  <button class="menu" aria-expanded="false" aria-controls="site-menu">MENU</button>
+  <nav id="site-menu" aria-label="主要導覽">
+    {links.map(([label, href]) => <a href={href}>{label}</a>)}
+  </nav>
+</header>
+<script>
+  const button = document.querySelector<HTMLButtonElement>('.menu');
+  const nav = document.querySelector<HTMLElement>('#site-menu');
+  button?.addEventListener('click', () => {
+    const open = button.getAttribute('aria-expanded') === 'true';
+    button.setAttribute('aria-expanded', String(!open)); nav?.classList.toggle('open', !open);
+  });
+</script>
+<style>
+  .header{position:relative;z-index:10;display:flex;align-items:start;justify-content:space-between;padding:1.1rem var(--edge);border-bottom:1px solid var(--line);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.04em}
+  .brand{font-size:16px;line-height:.9;font-weight:500;letter-spacing:-.07em}.menu{display:none;background:none;border:0;padding:0;color:inherit;font:inherit}nav{display:flex;gap:1.5rem}nav a:hover{text-decoration:underline;text-underline-offset:.3em}
+  @media(max-width:700px){.menu{display:block}nav{display:none;position:absolute;top:100%;left:0;right:0;padding:1rem var(--edge) 1.4rem;background:var(--paper);border-bottom:1px solid var(--line);flex-direction:column;gap:.7rem}nav.open{display:flex}}
+</style>
