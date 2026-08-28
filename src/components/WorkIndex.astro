@@ -1,9 +1,10 @@
 ---
 import { categories } from '../data/projects';
+import { sitePath } from '../lib/paths';
 const { active } = Astro.props;
 ---
 <nav class="index" aria-label="作品分類">
-  <a class:list={[{active: !active}]} href="/works">ALL WORKS</a>
-  {categories.map((category) => <a class:list={[{active: active === category.slug}]} href={`/works/${category.slug}`}>{category.label}<span>{category.english}</span></a>)}
+  <a class:list={[{active: !active}]} href={sitePath('/works')}>ALL WORKS</a>
+  {categories.map((category) => <a class:list={[{active: active === category.slug}]} href={sitePath(`/works/${category.slug}`)}>{category.label}<span>{category.english}</span></a>)}
 </nav>
 <style>.index{display:flex;gap:1.2rem;overflow-x:auto;padding:1rem var(--edge);border-bottom:1px solid var(--line);font-family:'IBM Plex Mono',monospace;font-size:11px;white-space:nowrap}.index a{color:var(--muted)}.index a.active,.index a:hover{color:var(--ink)}.index span{margin-left:.4rem;opacity:.55}@media(max-width:700px){.index{padding-top:.8rem;padding-bottom:.8rem}}</style>

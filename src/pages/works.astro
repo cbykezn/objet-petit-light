@@ -1,4 +1,5 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro'; import WorkIndex from '../components/WorkIndex.astro'; import ProjectGrid from '../components/ProjectGrid.astro'; import { projects } from '../data/projects';
+import BaseLayout from '../layouts/BaseLayout.astro'; import WorkIndex from '../components/WorkIndex.astro'; import ProjectGrid from '../components/ProjectGrid.astro'; import { activeProjects } from '../data/projects';
+const works = activeProjects.filter((project) => project.category !== 'upcoming');
 ---
-<BaseLayout title="作品 — Objet Petit L"><WorkIndex /><section class="section"><p class="eyebrow">Work Index</p><h1 class="section-title">所有作品</h1><ProjectGrid projects={projects} /></section></BaseLayout>
+<BaseLayout title="作品 — Objet Petit L" canonicalPath="/works"><WorkIndex /><section class="section"><p class="eyebrow">Work Index</p><h1 class="section-title">所有作品</h1><ProjectGrid projects={works} /></section></BaseLayout>

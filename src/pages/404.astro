@@ -1,0 +1,6 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { sitePath } from '../lib/paths';
+---
+<BaseLayout title="找不到頁面 — Objet Petit L"><section class="not-found section"><p class="eyebrow">404</p><h1>這個頁面不在光裡。</h1><a href={sitePath('/works')}>返回作品 →</a></section></BaseLayout>
+<style>.not-found{min-height:65svh;display:flex;flex-direction:column;justify-content:center;align-items:start}.not-found h1{max-width:12ch;font-size:clamp(3rem,8vw,8rem);font-weight:500;line-height:1.05}.not-found a{text-decoration:underline;text-underline-offset:.4rem}</style>

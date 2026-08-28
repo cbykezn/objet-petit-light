@@ -1,6 +1,9 @@
+---
+import { site } from '../config/site';
+---
 <footer>
   <div>Objet Petit L<br />Lighting Design Studio</div>
-  <div><a href="mailto:hello@objetpetitlight.com">hello@objetpetitlight.com</a><br /><a href="https://www.instagram.com/" rel="noreferrer" target="_blank">Instagram</a></div>
+  <div><a href={`mailto:${site.email}`}>{site.email}</a><br /><a href={site.instagram} rel="noreferrer" target="_blank">Instagram</a> · <a href={site.linkedin} rel="noreferrer" target="_blank">LinkedIn</a></div>
   <div class="eyebrow">© {new Date().getFullYear()} Objet Petit L</div>
 </footer>
 <style>footer{display:grid;grid-template-columns:1fr 1fr auto;gap:2rem;padding:1.5rem var(--edge);border-top:1px solid var(--line);font-size:12px}footer a:hover{text-decoration:underline}@media(max-width:700px){footer{grid-template-columns:1fr 1fr}.eyebrow{grid-column:1/-1}}</style>

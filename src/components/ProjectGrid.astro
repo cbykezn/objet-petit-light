@@ -1,10 +1,11 @@
 ---
 import type { Project } from '../data/projects';
+import { assetPath, sitePath } from '../lib/paths';
 const { projects } = Astro.props as { projects: Project[] };
 ---
 <div class="grid">
-  {projects.map((project) => <a class="project" href={`/projects/${project.slug}`}>
-    <img src={project.cover} alt={`${project.title} 劇照`} loading="lazy" />
+  {projects.map((project) => <a class="project" href={sitePath(`/projects/${project.slug}`)}>
+    <img src={assetPath(project.cover)} alt={`${project.title} 劇照`} loading="lazy" style={`object-position:${project.heroDesktopFocusX} ${project.heroDesktopFocusY}`} />
     <div class="caption"><span>{project.title}</span><span>{project.year}</span></div>
   </a>)}
 </div>

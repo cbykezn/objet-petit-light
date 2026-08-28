@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WorkIndex from '../components/WorkIndex.astro';
+import ProjectGrid from '../components/ProjectGrid.astro';
+import { activeProjects, categories } from '../data/projects';
+
+export const aliases = [
+  { legacy:'theater', category:'theater' },
+  { legacy:'dance', category:'dance' },
+  { legacy:'architecture-landscape', category:'architecture' },
+  { legacy:'exhib.-event', category:'exhibition' },
+] as const;
+
+export function getStaticPaths() {
+  return aliases.map((alias) => ({ params:{ legacy:alias.legacy }, props:alias }));
+}
+
+const { category: categorySlug } = Astro.props;
+const category = categories.find((entry) => entry.slug === categorySlug)!;
+const filtered = activeProjects.filter((project) => project.category === categorySlug);
+---
+<BaseLayout title={`${category.label} — Objet Petit L`} canonicalPath={`/works/${category.slug}`}>
+  <WorkIndex active={category.slug} />
+  <section class="section"><p class="eyebrow">{category.english}</p><h1 class="section-title">{category.label}</h1><ProjectGrid projects={filtered} /></section>
+</BaseLayout>

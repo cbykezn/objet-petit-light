@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { sitePath } from '../../lib/paths';
 export const services = {
   'theater-dance': { title:'劇場／舞蹈', english:'Theatre / Dance', body:'從排練到演出現場，與導演、編舞家及技術團隊共同建立光的時間性與情緒結構。' },
   'space-lighting': { title:'空間燈光', english:'Spatial Lighting', body:'以光線梳理空間的尺度、材質與停留方式，讓建築環境在日常與特殊時刻都有清晰的感受。' },
@@ -9,5 +10,5 @@ export const services = {
 export function getStaticPaths(){ return Object.entries(services).map(([service, content]) => ({ params:{service}, props:{content} })); }
 const { content } = Astro.props;
 ---
-<BaseLayout title={`${content.title} — Objet Petit L`}><section class="intro section"><p class="eyebrow">Services / {content.english}</p><h1>{content.title}</h1><p>{content.body}</p><a href="/contact">與我們討論你的計畫 →</a></section></BaseLayout>
+<BaseLayout title={`${content.title} — Objet Petit L`} canonicalPath={`/services/${Astro.params.service}`}><section class="intro section"><p class="eyebrow">Services / {content.english}</p><h1>{content.title}</h1><p>{content.body}</p><a href={sitePath('/contact#contact-form')}>與我們討論你的計畫 →</a></section></BaseLayout>
 <style>.intro{min-height:70svh;display:flex;flex-direction:column;align-items:start;justify-content:center}.intro h1{margin:.6rem 0;font-size:clamp(3rem,10vw,10rem);font-weight:500;line-height:1.05}.intro p:not(.eyebrow){max-width:34rem;font-size:clamp(1.1rem,2vw,1.5rem)}.intro a{margin-top:2rem;font-family:'IBM Plex Mono',monospace;text-decoration:underline;text-underline-offset:.4rem}</style>

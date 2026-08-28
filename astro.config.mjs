@@ -2,9 +2,11 @@
 import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
-const repository = process.env.GITHUB_REPOSITORY?.split('/')[1];
+const [owner, repository] = process.env.GITHUB_REPOSITORY?.split('/') ?? [];
+const customSite = process.env.SITE_URL;
+const githubSite = owner ? `https://${owner}.github.io` : 'http://localhost:4321';
 
 export default defineConfig({
-  site: process.env.SITE_URL || 'https://example.github.io',
-  base: process.env.GITHUB_ACTIONS && repository ? `/${repository}` : '',
+  site: customSite || githubSite,
+  base: process.env.GITHUB_ACTIONS && repository && !customSite ? `/${repository}` : '',
 });

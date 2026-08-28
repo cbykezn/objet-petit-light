@@ -1,6 +1,6 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro'; import WorkIndex from '../../components/WorkIndex.astro'; import ProjectGrid from '../../components/ProjectGrid.astro'; import { projects, categories } from '../../data/projects';
+import BaseLayout from '../../layouts/BaseLayout.astro'; import WorkIndex from '../../components/WorkIndex.astro'; import ProjectGrid from '../../components/ProjectGrid.astro'; import { activeProjects, categories } from '../../data/projects';
 export function getStaticPaths() { return categories.map((category) => ({ params: { category: category.slug }, props: { category } })); }
-const { category } = Astro.props; const filtered = projects.filter((project) => project.category === category.slug);
+const { category } = Astro.props; const filtered = activeProjects.filter((project) => project.category === category.slug);
 ---
-<BaseLayout title={`${category.label} — Objet Petit L`}><WorkIndex active={category.slug} /><section class="section"><p class="eyebrow">{category.english}</p><h1 class="section-title">{category.label}</h1><ProjectGrid projects={filtered} /></section></BaseLayout>
+<BaseLayout title={`${category.label} — Objet Petit L`} canonicalPath={`/works/${category.slug}`}><WorkIndex active={category.slug} /><section class="section"><p class="eyebrow">{category.english}</p><h1 class="section-title">{category.label}</h1><ProjectGrid projects={filtered} /></section></BaseLayout>

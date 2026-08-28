@@ -1,0 +1,29 @@
+---
+import { site } from '../config/site';
+---
+<section class="contact-section section" id="contact-form">
+  <div>
+    <p class="eyebrow">Contact</p>
+    <h2>讓我們一起，為下一個場景點燈。</h2>
+    <p><a href={`mailto:${site.email}`}>{site.email}</a></p>
+  </div>
+  <form action={site.formEndpoint} method="POST">
+    <input type="hidden" name="_subject" value="Objet Petit L 網站新訊息" />
+    <input type="hidden" name="_captcha" value="false" />
+    <label class="honeypot" aria-hidden="true">請勿填寫<input name="_honey" tabindex="-1" autocomplete="off" /></label>
+    <label>姓名<input required name="name" autocomplete="name" /></label>
+    <label>電子郵件<input required name="email" type="email" autocomplete="email" /></label>
+    <label>訊息<textarea required name="message" rows="5"></textarea></label>
+    <button type="submit">SEND MESSAGE →</button>
+    <small>送出後將由表單服務安全轉寄至工作室信箱。</small>
+  </form>
+</section>
+<style>
+  .contact-section{display:grid;grid-template-columns:1fr 1fr;gap:clamp(3rem,8vw,8rem);border-top:1px solid var(--line)}
+  h2{max-width:12ch;margin:1rem 0;font-size:clamp(2.3rem,5vw,5rem);font-weight:500;line-height:1.12}
+  form{display:grid;align-content:start;gap:1rem}label{display:grid;gap:.35rem;font-family:'IBM Plex Mono',monospace;font-size:11px}
+  input,textarea{width:100%;padding:.7rem 0;border:0;border-bottom:1px solid var(--ink);border-radius:0;background:transparent;color:inherit;font:16px 'Noto Sans TC',sans-serif}
+  button{justify-self:start;margin-top:1rem;padding:.2rem 0;border:0;background:none;color:inherit;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:12px;text-decoration:underline;text-underline-offset:.4rem}
+  small{color:var(--muted);font-size:11px}.honeypot{position:absolute;left:-10000px}
+  @media(max-width:700px){.contact-section{grid-template-columns:1fr}}
+</style>

@@ -1,8 +1,15 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-interface Props { title?: string; description?: string; }
-const { title = 'Objet Petit L — Lighting Design', description = 'Objet Petit L 燈光設計工作室' } = Astro.props;
+import ContactSection from '../components/ContactSection.astro';
+import { site } from '../config/site';
+import { sitePath } from '../lib/paths';
+interface Props { title?: string; description?: string; image?: string; canonicalPath?: string; }
+const { title = 'Objet Petit L — Lighting Design', description = site.description, image, canonicalPath } = Astro.props;
+const canonical = canonicalPath ? new URL(sitePath(canonicalPath).replace(/^\//, ''), Astro.site) : Astro.url;
+const socialImage = image ? new URL(image, Astro.site) : undefined;
+const verification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION || 'JME5hkEBdaK-VIW6btaBN-jSAy5lRyrK6TeR1f9HAuc';
+const schema = JSON.stringify({ '@context':'https://schema.org', '@type':'ProfessionalService', name:site.fullName, url:canonical.origin, email:site.email, sameAs:[site.instagram, site.linkedin] });
 ---
 <!doctype html>
 <html lang="zh-Hant">
@@ -11,11 +18,23 @@ const { title = 'Objet Petit L — Lighting Design', description = 'Objet Petit 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#11110f" />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_TW" />
+    <meta property="og:site_name" content={site.fullName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {socialImage && <meta property="og:image" content={socialImage} />}
+    <meta name="twitter:card" content={socialImage ? 'summary_large_image' : 'summary'} />
+    {verification && <meta name="google-site-verification" content={verification} />}
+    <script type="application/ld+json" set:html={schema} />
     <title>{title}</title>
   </head>
   <body>
     <Header />
     <main><slot /></main>
+    <ContactSection />
     <Footer />
   </body>
 </html>
@@ -30,4 +49,6 @@ const { title = 'Objet Petit L — Lighting Design', description = 'Objet Petit 
   .eyebrow { font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.05em; text-transform:uppercase; }
   .section { padding:clamp(4rem,10vw,9rem) var(--edge); }
   .section-title { margin:0 0 2.5rem; font-size:clamp(1.8rem,4vw,4.5rem); font-weight:500; line-height:1.1; }
+  :focus-visible { outline:2px solid currentColor; outline-offset:4px; }
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>

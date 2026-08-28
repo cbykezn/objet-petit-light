@@ -1,13 +1,14 @@
 ---
+import { sitePath } from '../lib/paths';
 const links = [
   ['作品','/works'], ['服務','/services'], ['簡介 / CV','/profile-cv'], ['聯絡','/contact']
 ];
 ---
 <header class="header">
-  <a class="brand" href="/" aria-label="Objet Petit L 首頁">Objet<br />Petit L</a>
+  <a class="brand" href={sitePath('/')} aria-label="Objet Petit L 首頁">Objet<br />Petit L</a>
   <button class="menu" aria-expanded="false" aria-controls="site-menu">MENU</button>
   <nav id="site-menu" aria-label="主要導覽">
-    {links.map(([label, href]) => <a href={href}>{label}</a>)}
+    {links.map(([label, href]) => <a href={sitePath(href)}>{label}</a>)}
   </nav>
 </header>
 <script>
