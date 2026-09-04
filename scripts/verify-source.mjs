@@ -24,7 +24,7 @@ if (workflow.includes('\\${{')) failures.push('.github/workflows/deploy.yml: esc
 
 const projectData = readFileSync('src/data/projects.ts', 'utf8');
 const records = (projectData.match(/"enabled":/g) ?? []).length;
-if (records !== 43) failures.push(`src/data/projects.ts: expected 43 CMS records, found ${records}`);
+if (records !== 44) failures.push(`src/data/projects.ts: expected 44 CMS records, found ${records}`);
 const jsonMatch = projectData.match(/export const projects: Project\[\] = (\[[\s\S]*?\]);\s*export const activeProjects/);
 if (!jsonMatch) failures.push('src/data/projects.ts: cannot parse CMS data');
 else {

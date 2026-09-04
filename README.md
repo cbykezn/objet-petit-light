@@ -17,7 +17,7 @@ pnpm preview
 
 ## 內容來源
 
-`src/data/projects.ts` 保存從 Framer `Projects` CMS 唯讀匯入的 43 筆資料，包含啟用狀態、分類、年份、Selected／Upcoming、Landing、首頁排序、圖片焦點、圖庫、Credits 與 SEO 欄位。網站只公開其中啟用的項目。
+`src/data/projects.ts` 保存從 Framer `Projects` CMS 唯讀匯入的 44 筆資料，包含啟用狀態、分類、年份、Selected／Upcoming、Landing、首頁排序、圖片焦點、圖庫、Credits 與 SEO 欄位。網站只公開其中啟用的項目。
 
 作品、圖片或 Credits 在 Framer 更新後，應重新執行資料匯入與建置驗證，再提交 Git 版本。
 
