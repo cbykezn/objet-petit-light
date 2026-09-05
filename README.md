@@ -21,6 +21,19 @@ pnpm preview
 
 作品、圖片或 Credits 在 Framer 更新後，應重新執行資料匯入與建置驗證，再提交 Git 版本。
 
+## 首頁原版排版（2026-09-06）
+
+首頁改以 Framer 正式站的 HTML/CSS 快照保留原始四宮格、圖片焦點、字型、完整文案與五種響應式排版；不再使用早期重建的輪播首頁。原版來源：https://objetpetitlight.framer.website/
+
+- `src/data/framer-home.html`：原版靜態結構，已移除 Framer 執行程式與 hydration。請勿在相鄰標籤之間加入換行／空白，原版的 `pre-wrap` 文字會因此改變行高。
+- `src/styles/framer-home.css`：原版字型與完整響應式樣式。
+- `src/scripts/home-interactions.ts`、`src/styles/home-interactions.css`：獨立執行的作品展開與 Works 選單。
+- `src/pages/index.astro`：套用 GitHub Pages 子路徑、SEO、CMS 圖片／作品連結與 FormSubmit。
+
+這是固定版本快照，不會隨 Framer 自動更新。若更動 Framer 首頁文字、結構或 CMS 首頁排序，需一併重新擷取首頁快照／樣式及更新 CMS 資料，再比對五種尺寸。只更新 `projects.ts` 不會改變快照中的列標題與順序。圖片及字型目前仍使用原版 CDN。
+
+驗證指令：`pnpm verify`、`pnpm build`、`pnpm verify:build`。首頁已比對 1440×900、1024×768、834×1112、768×390、390×844 的可見命名區塊位置與尺寸；不包含 Framer 平台徽章／編輯浮鈕及瀏覽器文字抗鋸齒差異。內頁維持既有重建版，不在本次首頁排版校正範圍。
+
 ## GitHub Pages
 
 推送到 `main` 後，`.github/workflows/deploy.yml` 會執行來源檢查、靜態建置並部署 GitHub Pages。Repository 的 Pages Source 需設定為 **GitHub Actions**。

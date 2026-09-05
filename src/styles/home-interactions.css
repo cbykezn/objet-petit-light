@@ -1,0 +1,21 @@
+/* Ported from WorksMenu and CMSSelectedWorkRow in the original Framer project. */
+html { scroll-behavior:smooth; }
+[data-framer-name="Full Bleed Opening — Featured Moment"] { width:calc(100vw - var(--scrollbar-width,0px)) !important;max-width:none !important; }
+.home-works-menu { position:absolute;top:calc(100% + 12px);left:-12px;width:min(280px,calc(100vw - 32px));padding:12px 14px;background:#F5F3EC;opacity:1;border:1px solid #173F73;box-shadow:0 14px 28px rgba(9,24,42,.12);font-family:'IBM Plex Mono',monospace;z-index:110; }
+.home-works-menu[hidden] { display:none; }
+.home-works-menu p { margin:0 0 7px;color:#173F73;font-size:10px;letter-spacing:.08em; }
+.home-works-menu a { display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid rgba(23,63,115,.32);color:#11110F;text-decoration:none;font-size:12px;line-height:1.25; }
+.home-works-menu small { color:#173F73;font-size:9px;letter-spacing:.06em;white-space:nowrap; }
+.home-works-menu.compact { background:#FAF9F4;box-shadow:0 16px 32px rgba(9,24,42,.2); }
+[data-framer-name="CMS Interactive Work Row"] article { transition:height .46s cubic-bezier(.22,1,.36,1),box-shadow .46s; }
+[data-framer-name="CMS Interactive Work Row"] article.compact > div:first-child { height:92px !important;grid-template-columns:1fr auto !important;grid-template-rows:auto auto !important;column-gap:10px !important;padding:10px 14px !important; }
+[data-framer-name="CMS Interactive Work Row"] article.compact > div:first-child > :first-child,
+[data-framer-name="CMS Interactive Work Row"] article.compact > div:first-child > :last-child { font-size:8px !important; }
+[data-framer-name="CMS Interactive Work Row"] article.compact strong { font-size:14px !important;grid-column:1 / -1 !important;grid-row:2 !important;display:-webkit-box !important;-webkit-box-orient:vertical;-webkit-line-clamp:2; }
+[data-framer-name="CMS Interactive Work Row"] article.compact > div:first-child > :last-child { grid-column:2 !important;grid-row:1 !important; }
+[data-framer-name="CMS Interactive Work Row"] article.compact > div:nth-child(2) { height:auto !important;aspect-ratio:4 / 3; }
+.home-row-image { width:100%;height:100%;object-fit:cover;background:#101820;display:block;border:1px solid #153F73;box-sizing:border-box; }
+.compact .home-row-image { object-fit:contain; }
+[data-home-glow] { transition:color .22s,text-shadow .22s,scale .22s; }
+[data-home-glow]:hover { scale:1.03;color:rgb(230,191,134);text-shadow:0 0 1px rgba(255,229,188,.75),0 0 5px rgba(255,181,82,.38); }
+@media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } [data-framer-name="CMS Interactive Work Row"] article,[data-home-glow] { transition:none; } }

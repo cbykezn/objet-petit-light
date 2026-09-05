@@ -13,6 +13,17 @@ const walk = (directory) => {
 roots.forEach(walk);
 
 const failures = [];
+const home = readFileSync('src/data/framer-home.html', 'utf8');
+if (/<script\b|data-framer-hydrate-v2|\son[a-z]+=/i.test(home)) failures.push('Homepage snapshot must not include Framer hydration or executable scripts');
+if (/>\s*\n\s*</.test(home)) failures.push('Homepage snapshot: added whitespace between tags changes Framer pre-wrap typography');
+for (const id of ['top', 'about', 'projects', 'services', 'selected', 'contact']) {
+  if (!home.includes(`id="${id}"`)) failures.push(`Homepage snapshot: missing ${id} anchor`);
+}
+if ((home.match(/data-framer-name="CMS Interactive Work Row"/g) ?? []).length !== 5) failures.push('Homepage snapshot: expected five Selected/Upcoming rows');
+const homeCss = readFileSync('src/styles/framer-home.css', 'utf8');
+for (const edge of ['666.98px', '667px', '810px', '1000px', '1200px']) {
+  if (!homeCss.includes(edge)) failures.push(`Homepage CSS: missing original ${edge} breakpoint`);
+}
 for (const file of files) {
   const source = readFileSync(file, 'utf8');
   if (/href=["']\/(?!\/)/.test(source)) failures.push(`${file}: root-relative href bypasses GitHub Pages base path`);
@@ -42,4 +53,4 @@ if (failures.length) {
   console.error(failures.join('\n'));
   process.exit(1);
 }
-console.log(`Verified ${files.length} source files and ${records} CMS records.`);
+console.log(`Verified ${files.length} source files, ${records} CMS records and the Framer homepage snapshot.`);
