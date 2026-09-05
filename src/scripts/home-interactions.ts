@@ -27,7 +27,12 @@ document.querySelectorAll<HTMLButtonElement>('button[aria-controls="works-catego
     (button.lastElementChild as HTMLElement).style.transform = 'rotate(0deg)';
   };
   button.addEventListener('click', () => {
-    if (!panel.hidden) { document.getElementById('projects')?.scrollIntoView({ behavior:'smooth' }); return; }
+    if (!panel.hidden) {
+      const projects = document.getElementById('projects');
+      if (projects) projects.scrollIntoView({ behavior:'smooth' });
+      else window.location.assign(`${base}#projects`);
+      return;
+    }
     panel.classList.toggle('compact', parseFloat(getComputedStyle(button.firstElementChild!).fontSize) <= 12);
     panel.hidden = false; button.setAttribute('aria-expanded', 'true');
     (button.lastElementChild as HTMLElement).style.transform = 'rotate(45deg)';

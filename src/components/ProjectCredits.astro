@@ -1,0 +1,33 @@
+---
+interface Props { credits: string[]; }
+const lines = Astro.props.credits.flatMap((line) => line.split(/\n+/)).map((line) => line.trim()).filter(Boolean);
+const heading = lines[0] || 'PROJECT CREDITS';
+const roles = lines.slice(1);
+---
+<section class="project-credits" data-project-credits>
+  <div class="credit-heading">{heading}</div>
+  <div class="credit-roles" id="project-credit-roles">{roles.map((line, index) => <div data-extra-role={index >= 6 ? '' : undefined}>{line}</div>)}</div>
+  {roles.length > 6 && <button hidden aria-expanded="false" aria-controls="project-credit-roles"><span>FULL CREDITS / 展開完整工作人員 ↓</span><span>+{roles.length - 6} ROLES</span></button>}
+</section>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-project-credits]').forEach((section) => {
+    const button = section.querySelector('button');
+    if (!button) return;
+    const extra = [...section.querySelectorAll<HTMLElement>('[data-extra-role]')];
+    extra.forEach((row) => row.hidden = true); button.hidden = false;
+    button.addEventListener('click', () => {
+      const expanded = button.getAttribute('aria-expanded') !== 'true';
+      button.setAttribute('aria-expanded', String(expanded));
+      extra.forEach((row) => row.hidden = !expanded);
+      button.children[0].textContent = expanded ? 'FULL CREDITS / 收合完整工作人員 ↑' : 'FULL CREDITS / 展開完整工作人員 ↓';
+      button.children[1].textContent = expanded ? 'CLOSE' : `+${extra.length} ROLES`;
+    });
+  });
+</script>
+<style>
+  .project-credits{width:100%;color:#384757;font-family:'IBM Plex Mono',monospace}
+  .credit-heading{font-family:'Chiron Hei HK',Satoshi,sans-serif;font-weight:700;font-size:15px;line-height:1.4;color:#101010;margin-bottom:12px}
+  .credit-roles{display:grid;gap:5px;font-size:10px;line-height:1.72}
+  button{margin-top:16px;display:flex;justify-content:space-between;align-items:center;width:100%;padding:11px 14px;border:1px solid #153F73;border-radius:0;background:#EAF3FA;color:#153F73;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:500;letter-spacing:.1em;line-height:1.2;text-align:left}
+  [hidden]{display:none}button[aria-expanded=true]{background:#F6F4EE}button:focus-visible{outline:2px solid #153F73;outline-offset:2px}
+</style>

@@ -1,16 +1,53 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro'; import { activeProjects } from '../../data/projects'; import { assetPath } from '../../lib/paths';
+import shell from '../../data/framer-project.html?raw';
+import '../../styles/framer-project.css';
+import '../../styles/home-interactions.css';
+import ProjectGallery from '../../components/ProjectGallery.astro';
+import ProjectCredits from '../../components/ProjectCredits.astro';
+import { activeProjects } from '../../data/projects';
+import { assetPath, sitePath } from '../../lib/paths';
+import { site } from '../../config/site';
 export function getStaticPaths() { return activeProjects.map((project) => ({ params: { slug: project.slug }, props: { project } })); }
 const { project } = Astro.props;
 const gallery = project.gallery.length ? project.gallery : [project.cover];
+const escapeHtml = (value: string) => value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;');
+const archives = { theater:'/theater', dance:'/dance', architecture:'/architecture-landscape', exhibition:'/exhib.-event', upcoming:'/#selected' };
+const replacements: Record<string, string> = {
+  __PROJECT_TITLE__: escapeHtml(project.title),
+  __COMPANY__: escapeHtml(project.company),
+  __VENUE__: project.infoLink ? `<a href="${escapeHtml(project.infoLink)}" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none" aria-label="活動資訊">${escapeHtml(project.venue)}</a>` : escapeHtml(project.venue),
+  __ARCHIVE_HREF__: sitePath(archives[project.category as keyof typeof archives]),
+};
+const markup = shell.replace(/href="(?:\.\.\/|https:\/\/objetpetitlight\.framer\.website\/)([^"]*)"/g, (_, path) => `href="${sitePath('/' + path)}"`)
+  .replace(/__PROJECT_TITLE__|__COMPANY__|__VENUE__|__ARCHIVE_HREF__/g, key => replacements[key]);
+const [beforeGallery, rest] = markup.split('__GALLERY_SLOT__');
+const [beforeCredits, afterCredits] = rest.split('__CREDITS_SLOT__');
+const canonical = new URL(sitePath('/projects/' + project.slug), Astro.site);
+const verification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION || 'JME5hkEBdaK-VIW6btaBN-jSAy5lRyrK6TeR1f9HAuc';
 ---
-<BaseLayout title={project.seoTitle || `${project.title} — Objet Petit L`} description={project.seoDescription || `${project.title}，${project.year}，${project.company}`} image={assetPath(project.cover)} canonicalPath={`/projects/${project.slug}`}>
-  <article><section class="hero"><img src={assetPath(project.cover)} alt={`${project.title} 主劇照`} style={`--desktop-position:${project.heroDesktopFocusX} ${project.heroDesktopFocusY};--mobile-position:${project.heroMobileFocusX} ${project.heroMobileFocusY}`} /><div><p class="eyebrow">{project.typeLabel} / {project.year}</p><h1>{project.title}</h1></div></section>
-  <section class="info section"><dl><div><dt>YEAR</dt><dd>{project.year}</dd></div>{project.company && <div><dt>COMPANY</dt><dd>{project.company}</dd></div>}{project.venue && <div><dt>VENUE</dt><dd>{project.venue}</dd></div>}{project.infoLink && <div><dt>INFO</dt><dd><a href={project.infoLink} target="_blank" rel="noreferrer">活動資訊 ↗</a></dd></div>}</dl>{project.credits.length > 0 && <div class="credits"><p class="eyebrow">Credits</p>{project.credits.map((line) => <p>{line}</p>)}</div>}</section>
-  <section class="gallery">{gallery.map((image, index) => <button data-image={assetPath(image)} aria-label={`檢視第 ${index + 1} 張劇照`}><img src={assetPath(image)} alt={`${project.title} 劇照 ${index + 1}`} loading="lazy" /></button>)}</section></article>
-  <dialog aria-label={`${project.title} 全螢幕劇照`}><button class="close" aria-label="關閉">×</button><img alt="全螢幕劇照" /></dialog>
-</BaseLayout>
-<script>
-  const dialog=document.querySelector<HTMLDialogElement>('dialog'); const large=dialog?.querySelector('img'); const close=()=>{if(typeof dialog?.close==='function')dialog.close();else dialog?.classList.remove('is-open')}; document.querySelectorAll<HTMLButtonElement>('.gallery button').forEach((button)=>button.addEventListener('click',()=>{if(large)large.src=button.dataset.image??'';if(typeof dialog?.showModal==='function')dialog.showModal();else dialog?.classList.add('is-open')})); dialog?.querySelector('.close')?.addEventListener('click',close); dialog?.addEventListener('click',(event)=>{if(event.target===dialog)close()}); document.addEventListener('keydown',(event)=>{if(event.key==='Escape')close()});
-</script>
-<style>.hero{position:relative;background:#181713}.hero>img{display:block;width:100%;height:min(78svh,900px);object-fit:cover;object-position:var(--desktop-position)}.hero>div{position:absolute;inset:auto var(--edge) 1.5rem;color:white;text-shadow:0 1px 20px rgba(0,0,0,.4)}.hero h1{margin:.3rem 0 0;font-size:clamp(2.5rem,7vw,7rem);font-weight:500;line-height:1.05}.info{display:grid;grid-template-columns:1fr 1fr;gap:3rem}.info dl{margin:0}.info dl div{display:grid;grid-template-columns:8rem 1fr;padding:.5rem 0;border-top:1px solid var(--line)}dt{font-family:'IBM Plex Mono',monospace;font-size:11px}dd{margin:0}.credits p{margin:.25rem 0;white-space:pre-line}.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:.35rem}.gallery button{padding:0;border:0;background:none;cursor:zoom-in}.gallery img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}dialog{max-width:none;width:100vw;height:100svh;padding:0;border:0;background:rgba(0,0,0,.96)}dialog.is-open{display:block;position:fixed;inset:0;z-index:100}dialog img{width:100%;height:100%;object-fit:contain}.close{position:fixed;top:1rem;right:var(--edge);z-index:1;border:0;background:none;color:white;font-size:2rem;cursor:pointer}@media(max-width:700px){.info{grid-template-columns:1fr;gap:2rem}.gallery{grid-template-columns:1fr}.hero>img{height:64svh;object-position:var(--mobile-position)}}</style>
+<!doctype html>
+<html lang="zh-Hant-TW" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{project.seoTitle || project.title + ' — Objet Petit L'}</title>
+    <meta name="description" content={project.seoDescription || site.description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_TW" />
+    <meta property="og:site_name" content={site.fullName} />
+    <meta property="og:title" content={project.seoTitle || project.title} />
+    <meta property="og:description" content={project.seoDescription || site.description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(assetPath(project.cover), Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    {verification && <meta name="google-site-verification" content={verification} />}
+    <link rel="icon" href="https://framerusercontent.com/images/Ore2V7jwc6PDMNYdVHoAivitqss.jpg" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Chiron+Hei+HK:ital,wght@0,400;0,600&amp;display=swap" rel="stylesheet" />
+  </head>
+  <body data-home-base={sitePath('/')}>
+    <Fragment set:html={beforeGallery} /><ProjectGallery images={gallery} title={project.title} /><Fragment set:html={beforeCredits} /><ProjectCredits credits={project.credits} /><Fragment set:html={afterCredits} />
+    <script src="../../scripts/home-interactions.ts"></script>
+  </body>
+</html>

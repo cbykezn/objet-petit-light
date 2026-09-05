@@ -36,6 +36,14 @@ pnpm preview
 
 ## GitHub Pages
 
+### 作品頁幻燈片（2026-09-06）
+
+所有啟用作品使用 `src/data/framer-project.html` 與 `src/styles/framer-project.css` 中的原版共用排版；標題、公司、場地、返回分類、照片及 Credits 仍由 `projects.ts` 在建置時填入。修改原版結構時才需更新此版型，不必為每件作品複製 HTML。
+
+`ProjectGallery.astro`／`project-gallery.ts` 提供單張完整大圖、底部橫向縮圖、前後循環換圖、240ms 淡入與手機滑動。點主圖開啟覆蓋整個瀏覽器視窗的劇照檢視；可點左右箭頭、鍵盤方向鍵、關閉鈕、背景或 Esc 操作。使用原生 dialog 隔離背景焦點、鎖定背景捲動並在關閉後還原焦點。此為原版風格的視窗全螢幕，不會強制隱藏瀏覽器工具列。照片使用原圖，不拿縮圖放大；單張／空圖庫會使用封面作為備援。
+
+`ProjectCredits.astro` 保留原版前六項／完整名單收合，無 JavaScript 時仍可讀到所有 Credits。建置驗證會檢查每件啟用作品的圖片數量、全螢幕控制與 GitHub Pages 子路徑。
+
 推送到 `main` 後，`.github/workflows/deploy.yml` 會執行來源檢查、靜態建置並部署 GitHub Pages。Repository 的 Pages Source 需設定為 **GitHub Actions**。
 
 工程會自動處理 `username.github.io/repository` 子路徑。若使用自有網域，於建置環境設定：

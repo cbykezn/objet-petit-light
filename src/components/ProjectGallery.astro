@@ -1,0 +1,57 @@
+---
+import { assetPath } from '../lib/paths';
+interface Props { images: string[]; title: string; }
+const { images, title } = Astro.props;
+// Preserve CMS order, remove duplicates, and never enlarge a CDN thumbnail.
+const fullImage = (src: string) => {
+  if (!src.startsWith('https://framerusercontent.com/')) return assetPath(src);
+  const url = new URL(src); url.searchParams.delete('scale-down-to'); return url.href;
+};
+const gallery = [...new Set(images.filter(Boolean).map(fullImage))];
+const thumb = (src: string) => {
+  if (!src.startsWith('https://framerusercontent.com/')) return src;
+  const url = new URL(src); url.searchParams.set('scale-down-to', '512'); return url.href;
+};
+---
+<section class="project-gallery" data-gallery aria-label={`${title} 劇照幻燈片`} aria-roledescription="carousel">
+  <div class="gallery-stage">
+    <button class="gallery-open" data-gallery-open aria-label="Open image fullscreen / 全螢幕觀看劇照" aria-haspopup="dialog">
+      <img data-gallery-image src={gallery[0]} alt={`${title} 劇照 1`} decoding="async" fetchpriority="high" />
+    </button>
+    {gallery.length > 1 && <><button class="gallery-arrow previous" data-gallery-previous aria-label="Previous image / 上一張">‹</button><button class="gallery-arrow next" data-gallery-next aria-label="Next image / 下一張">›</button></>}
+  </div>
+  <div class="gallery-thumbnails" aria-label="選擇劇照">
+    {gallery.map((src, index) => <button data-gallery-thumb data-full-image={src} aria-label={`Show image ${index + 1} / 第 ${index + 1} 張`} aria-current={index === 0 ? 'true' : undefined}><img src={thumb(src)} alt="" loading="lazy" decoding="async" /></button>)}
+  </div>
+  <span class="gallery-status" role="status" aria-live="polite" data-gallery-status>第 1 張，共 {gallery.length} 張</span>
+  <dialog class="gallery-viewer" data-gallery-dialog aria-label={`${title} 全螢幕劇照`}>
+    <img data-gallery-full-image alt={`${title} 劇照 1`} decoding="async" />
+    <button class="gallery-close" data-gallery-close aria-label="Close fullscreen image / 關閉全螢幕" autofocus>×</button>
+    {gallery.length > 1 && <><button class="gallery-arrow previous" data-gallery-previous aria-label="Previous image / 上一張">‹</button><button class="gallery-arrow next" data-gallery-next aria-label="Next image / 下一張">›</button></>}
+  </dialog>
+</section>
+<script src="../scripts/project-gallery.ts"></script>
+<style>
+  .project-gallery{position:relative;display:flex;flex-direction:column;width:100%;height:100%;min-height:0;gap:12px;overflow:hidden}
+  .gallery-stage{position:relative;flex:1 1 auto;min-width:0;min-height:0;overflow:hidden;background:#101010}
+  .gallery-open{display:block;width:100%;height:100%;padding:0;border:0;border-radius:0;background:transparent;cursor:zoom-in;touch-action:pan-y pinch-zoom}
+  .gallery-open img{display:block;width:100%;height:100%;object-fit:contain}
+  .gallery-thumbnails{display:flex;flex-direction:row;width:100%;height:75px;min-height:75px;gap:12px;overflow-x:auto;overflow-y:hidden;padding-bottom:2px;scrollbar-width:thin;scrollbar-color:#153F73 transparent}
+  .gallery-thumbnails button{flex:0 0 104px;width:104px;height:100%;padding:0;overflow:hidden;cursor:pointer;border:2px solid transparent;border-radius:0;background:#F4F3EE;opacity:.62}
+  .gallery-thumbnails button[aria-current=true]{border-color:#153F73;opacity:1}
+  .gallery-thumbnails img{display:block;width:100%;height:100%;object-fit:cover}
+  .gallery-arrow{position:absolute;top:50%;transform:translateY(-50%);display:grid;place-items:center;width:28px;height:28px;padding:0;border:1px solid rgba(244,243,238,.28);border-radius:0;color:rgba(244,243,238,.52);background:transparent;cursor:pointer;font-size:20px;line-height:1}
+  .previous{left:12px}.next{right:12px}
+  .gallery-viewer{position:fixed;inset:0;margin:0;width:100vw;height:100vh;height:100dvh;max-width:none;max-height:none;padding:24px;border:0;box-sizing:border-box;background:rgba(10,17,26,.96);cursor:zoom-out;overflow:hidden}
+  .gallery-viewer[open]{display:grid;place-items:center}
+  .gallery-viewer::backdrop{background:transparent}
+  .gallery-viewer>img{display:block;width:auto;height:auto;max-width:calc(100vw - 96px);max-height:calc(100vh - 96px);max-height:calc(100dvh - 96px);object-fit:contain;cursor:default;touch-action:pan-y pinch-zoom}
+  .gallery-close{position:absolute;top:18px;right:18px;display:grid;place-items:center;width:42px;height:42px;padding:0;border:1px solid #153F73;background:#F6F4EE;color:#153F73;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:24px;line-height:1}
+  .gallery-viewer .previous{left:16px}.gallery-viewer .next{right:16px}
+  .gallery-status{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  button:focus-visible{outline:2px solid #7fbfe6;outline-offset:-3px}
+  @media(min-width:810px) and (max-width:1199.98px){.project-gallery,.gallery-thumbnails{gap:10px}.gallery-thumbnails{height:70px;min-height:70px}.gallery-thumbnails button{flex-basis:80px;width:80px}}
+  @media(max-width:809.98px){.project-gallery,.gallery-thumbnails{gap:8px}.gallery-thumbnails{height:70px;min-height:70px}.gallery-thumbnails button{flex-basis:72px;width:72px}}
+  @media(max-width:719.98px) and (orientation:portrait){.gallery-stage .gallery-arrow{width:26px;height:26px;border:none;color:rgba(255,255,255,.82);font-size:21px}.gallery-stage .previous{left:5px}.gallery-stage .next{right:5px}}
+  @media(max-width:719.98px){.gallery-viewer .gallery-arrow{width:26px;height:26px;border:none;color:rgba(255,255,255,.82);font-size:21px}.gallery-viewer .previous{left:8px}.gallery-viewer .next{right:8px}}
+</style>
