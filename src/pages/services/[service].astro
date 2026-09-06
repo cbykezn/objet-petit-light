@@ -1,14 +1,45 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import snapshots from '../../data/framer-services.json';
+import theaterCss from '../../styles/services/theater-dance.css?url';
+import spaceCss from '../../styles/services/space-lighting.css?url';
+import exhibitionCss from '../../styles/services/exhibition.css?url';
+import eventsCss from '../../styles/services/events.css?url';
+import '../../styles/home-interactions.css';
 import { sitePath } from '../../lib/paths';
-export const services = {
-  'theater-dance': { title:'劇場／舞蹈', english:'Theatre / Dance', body:'從排練到演出現場，與導演、編舞家及技術團隊共同建立光的時間性與情緒結構。' },
-  'space-lighting': { title:'空間燈光', english:'Spatial Lighting', body:'以光線梳理空間的尺度、材質與停留方式，讓建築環境在日常與特殊時刻都有清晰的感受。' },
-  exhibition: { title:'展覽', english:'Exhibition', body:'為展件、觀者與敘事之間設定觀看的節奏，讓光成為展覽內容的一部分。' },
-  events: { title:'活動', english:'Events', body:'為品牌活動與現場演出打造可被記住的視覺氣氛，並兼顧執行的精準與彈性。' }
-} as const;
-export function getStaticPaths(){ return Object.entries(services).map(([service, content]) => ({ params:{service}, props:{content} })); }
+import { site } from '../../config/site';
+export function getStaticPaths() {
+  return snapshots.map(content => ({ params: { service: content.slug }, props: { content } }));
+}
 const { content } = Astro.props;
+const css = { 'theater-dance': theaterCss, 'space-lighting': spaceCss, exhibition: exhibitionCss, events: eventsCss };
+const markup = content.body.replace(/href="(?:\.\.\/|https:\/\/objetpetitlight\.framer\.website\/)([^"]*)"/g, (_, path) => `href="${sitePath('/' + path)}"`);
+const canonical = new URL(sitePath('/services/' + content.slug), Astro.site);
+const verification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION || 'JME5hkEBdaK-VIW6btaBN-jSAy5lRyrK6TeR1f9HAuc';
 ---
-<BaseLayout title={`${content.title} — Objet Petit L`} canonicalPath={`/services/${Astro.params.service}`}><section class="intro section"><p class="eyebrow">Services / {content.english}</p><h1>{content.title}</h1><p>{content.body}</p><a href={sitePath('/contact#contact-form')}>與我們討論你的計畫 →</a></section></BaseLayout>
-<style>.intro{min-height:70svh;display:flex;flex-direction:column;align-items:start;justify-content:center}.intro h1{margin:.6rem 0;font-size:clamp(3rem,10vw,10rem);font-weight:500;line-height:1.05}.intro p:not(.eyebrow){max-width:34rem;font-size:clamp(1.1rem,2vw,1.5rem)}.intro a{margin-top:2rem;font-family:'IBM Plex Mono',monospace;text-decoration:underline;text-underline-offset:.4rem}</style>
+<!doctype html>
+<html lang="zh-Hant-TW" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{content.title}</title>
+    <meta name="description" content={content.description || site.description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_TW" />
+    <meta property="og:site_name" content={site.fullName} />
+    <meta property="og:title" content={content.title} />
+    <meta property="og:description" content={content.description || site.description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content="https://framerusercontent.com/images/raWnl31aY07k9ncDMvgqXYD864.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    {verification && <meta name="google-site-verification" content={verification} />}
+    <link rel="icon" href="https://framerusercontent.com/images/Ore2V7jwc6PDMNYdVHoAivitqss.jpg" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Chiron+Hei+HK:ital,wght@0,400;0,600&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href={css[content.slug as keyof typeof css]} />
+  </head>
+  <body data-home-base={sitePath('/')}>
+    <Fragment set:html={markup} />
+    <script src="../../scripts/home-interactions.ts"></script>
+  </body>
+</html>

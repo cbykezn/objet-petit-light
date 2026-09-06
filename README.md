@@ -34,6 +34,12 @@ pnpm preview
 
 驗證指令：`pnpm verify`、`pnpm build`、`pnpm verify:build`。首頁已比對 1440×900、1024×768、834×1112、768×390、390×844 的可見命名區塊位置與尺寸；不包含 Framer 平台徽章／編輯浮鈕及瀏覽器文字抗鋸齒差異。內頁維持既有重建版，不在本次首頁排版校正範圍。
 
+## 服務頁原版排版（2026-09-06）
+
+四項服務內頁使用 `src/data/framer-services.json` 與 `src/styles/services/` 的 Framer 正式站靜態快照，保留完整文案、合作流程、案例與響應式排版。`src/pages/services/[service].astro` 只載入該頁樣式，並轉換所有站內連結以支援 GitHub Pages 子路徑；Works 選單沿用首頁互動程式。
+
+快照不會自動同步。Framer 服務頁修改後需重新擷取 HTML/CSS，移除平台執行程式與徽章，且不可在相鄰標籤間新增空白／換行，以免影響原版 pre-wrap 文字排版。圖片與字型仍使用原版 CDN。獨立 `/services` 索引頁沒有對應的 Framer 原頁，維持既有版本。
+
 ## GitHub Pages
 
 ### 作品頁幻燈片（2026-09-06）
