@@ -1,5 +1,37 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import content from '../data/framer-profile.json';
+import profileCss from '../styles/framer-profile.css?url';
+import '../styles/home-interactions.css';
+import { sitePath } from '../lib/paths';
 import { site } from '../config/site';
+const markup = content.body.replace(/href="(?:\.\/|https:\/\/objetpetitlight\.framer\.website\/)([^"]*)"/g, (_, path) => `href="${sitePath('/' + path)}"`);
+const canonical = new URL(sitePath('/profile-cv'), Astro.site);
+const verification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION || 'JME5hkEBdaK-VIW6btaBN-jSAy5lRyrK6TeR1f9HAuc';
 ---
-<BaseLayout title="黃俊諺 Profile / CV — Objet Petit L" description="黃俊諺，劇場與建築燈光設計師、小幻光設計所創辦人，華盛頓大學劇場燈光設計藝術碩士。" canonicalPath="/profile-cv"><section class="profile section"><p class="eyebrow">Profile / CV</p><h1>黃俊諺<br />Huang, Chun-Yen</h1><div class="copy"><p>劇場與建築燈光設計師、小幻光設計所 Objet Petit L(ighting) 創辦人。取得美國華盛頓大學劇場燈光設計藝術碩士，現以台灣為工作基地。</p><p>他的創作關注人、社會與空間之間的關係，並相信燈光不只協助敘事，也能讓一個好故事在觀者心中持續發生作用。</p><blockquote>「成為劇場創作者，是我愛這個世界的方式。」</blockquote><p>工作範圍包含劇場、舞蹈、建築空間、展覽與品牌活動，亦開放國內外合作。</p><p><a href={`mailto:${site.email}`}>Email</a> · <a href={site.instagram} target="_blank" rel="noreferrer">Instagram</a> · <a href={site.linkedin} target="_blank" rel="noreferrer">LinkedIn</a></p></div></section></BaseLayout><style>.profile{min-height:75svh;display:grid;grid-template-columns:1fr 1fr;align-content:center;gap:2rem}.profile h1{grid-column:1/-1;margin:0;font-size:clamp(3rem,9vw,9rem);font-weight:500;line-height:.98}.copy{grid-column:2;max-width:40rem;font-size:1.1rem}.copy a{text-decoration:underline;text-underline-offset:.3rem}blockquote{margin:2rem 0;padding-left:1rem;border-left:1px solid var(--ink);font-size:1.25rem}@media(max-width:700px){.profile{display:block}.copy{margin-top:3rem}}</style>
+<!doctype html>
+<html lang="zh-Hant-TW" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{content.title}</title>
+    <meta name="description" content={content.description || site.description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_TW" />
+    <meta property="og:site_name" content={site.fullName} />
+    <meta property="og:title" content={content.title} />
+    <meta property="og:description" content={content.description || site.description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content="https://framerusercontent.com/images/raWnl31aY07k9ncDMvgqXYD864.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    {verification && <meta name="google-site-verification" content={verification} />}
+    <link rel="icon" href="https://framerusercontent.com/images/Ore2V7jwc6PDMNYdVHoAivitqss.jpg" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Chiron+Hei+HK:ital,wght@0,400;0,600&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href={profileCss} />
+  </head>
+  <body data-home-base={sitePath('/')}>
+    <Fragment set:html={markup} />
+    <script src="../scripts/home-interactions.ts"></script>
+  </body>
+</html>

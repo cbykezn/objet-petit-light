@@ -9,6 +9,7 @@ const site = new URL(canonical);
 let checked = 0;
 const services = JSON.parse(readFileSync('src/data/framer-services.json', 'utf8'));
 const pages = [{ path: '', html }, ...services.map(({ slug }) => ({ path: `services/${slug}/`, html: readFileSync(`dist/services/${slug}/index.html`, 'utf8') }))];
+pages.push({ path: 'profile-cv/', html: readFileSync('dist/profile-cv/index.html', 'utf8') });
 for (const page of pages) {
 assert(!/(?:src|href)="[^\"]*(?:framerusercontent.com\/sites|events.framer.com)/.test(page.html), `Unexpected Framer runtime: ${page.path}`);
 for (const match of page.html.matchAll(/\b(?:href|src)="([^"]+)"/g)) {
@@ -27,4 +28,4 @@ for (const match of page.html.matchAll(/\b(?:href|src)="([^"]+)"/g)) {
 assert(!/(?:src|href)="[^\"]*(?:framerusercontent.com\/sites|events.framer.com)/.test(html), 'Unexpected Framer runtime');
 assert(html.includes('name="google-site-verification"'), 'Search Console metadata must be retained');
 assert(html.includes('method="POST"'), 'Contact form needs a submission method');
-console.log(`Verified ${checked} built homepage/service links/assets at ${site.href}`);
+console.log(`Verified ${checked} built homepage/service/profile links/assets at ${site.href}`);

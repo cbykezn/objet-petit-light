@@ -42,6 +42,10 @@ pnpm preview
 
 ## GitHub Pages
 
+### 個人介紹與履歷頁（2026-09-06）
+
+`src/data/framer-profile.json` 與 `src/styles/framer-profile.css` 保存 Framer `/profile-cv` 的完整靜態排版、肖像、中英文介紹與履歷連結。`src/pages/profile-cv.astro` 處理 SEO、GitHub Pages 路徑與共用 Works 選單。更新方式與服務頁相同：重新擷取原版快照並維持標籤間空白，不會自動同步 Framer；肖像及字型沿用原版 CDN。建置檢查已涵蓋這一頁的站內連結與資源。
+
 ### 作品頁幻燈片（2026-09-06）
 
 所有啟用作品使用 `src/data/framer-project.html` 與 `src/styles/framer-project.css` 中的原版共用排版；標題、公司、場地、返回分類、照片及 Credits 仍由 `projects.ts` 在建置時填入。修改原版結構時才需更新此版型，不必為每件作品複製 HTML。
